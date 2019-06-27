@@ -5,17 +5,16 @@
 # is restricted to this project.
 use Mix.Config
 
-config :phoenix_trello,
-  namespace: PhoenixTrello,
-  ecto_repos: [PhoenixTrello.Repo]
+# General application configuration
+config :imcon,
+  ecto_repos: [Imcon.Repo]
 
 # Configures the endpoint
-config :phoenix_trello, PhoenixTrello.Endpoint,
+config :imcon, ImconWeb.Endpoint,
   url: [host: "localhost"],
-  root: Path.dirname(__DIR__),
-  secret_key_base: "hWbd3QwLuaWKwJY5qYOKLGSBboxjnW46c4TzBAa+cMODz26RokgHQIJo6Nej3DGr",
-  render_errors: [accepts: ~w(html json)],
-  pubsub: [name: PhoenixTrello.PubSub,
+  secret_key_base: "xwBv9uRfkEpl0JUrqE7u4C3cSDZD8dc33U2EVlWigIQqeerlwJXUd7FmbeM8KiQJ",
+  render_errors: [view: ImconWeb.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: ImconWeb.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
@@ -27,17 +26,20 @@ config :logger, :console,
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
 
-# Configure phoenix generators
-config :phoenix, :generators,
-  migration: true,
-  binary_id: false
-
 # Configure guardian
 config :guardian, Guardian,
-  issuer: "PhoenixTrello",
+  allowed_algos: ["HS512"], # optional
+  verify_module: Guardian.JWT,  # optional
+  issuer: "ImconWeb",
   ttl: { 3, :days },
   verify_issuer: true,
-  serializer: PhoenixTrello.GuardianSerializer
+  secret_key: "w3A7N/+OuvCHLPC09r/XAtojeXfWYOrRFC7ttZAsW0ZJavMw1ffo1s5ZwIzY7Lbk",
+  serializer: ImconWeb.GuardianSerializer
 
 # Start Hound for PhantomJs
 config :hound, driver: "chrome_driver"
+
+config :mime, :types, %{
+      "application/json" => ["json"],
+      "application/xml" => ["xml"]
+    }
